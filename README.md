@@ -1,57 +1,41 @@
 # Invariant Playground
 
-A compact numerical laboratory for dynamical systems, candidate invariants,
-and residual-based diagnostics. It uses Python's standard library only.
+**An experimental numerical laboratory for exploring state manifolds, dynamical systems, conservation invariants, and residual-based diagnostics.**
 
-## State space and dynamics
+---
 
-The pendulum state is
+## Overview
 
-    x = (theta, omega) in M = S^1 x R
+Most simulation software relies on brute-force numerical approximation, treating drift as an inevitable nuisance. **Invariant Playground** takes a structural approach: it models systems through formal state-manifold geometry and uses adaptive residual analysis to distinguish between numerical truncation error, unmodeled physical dissipation, and structural model breakdown.
 
-where theta is angular position and omega is angular velocity.
+Built with **zero external dependencies** (Python standard library only).
 
-The vector field is
+---
 
-    theta_dot = omega
-    omega_dot = -(g/L) sin(theta) - b omega
+## Formal System Specification
 
-The conservative model has b = 0. The dissipative model has b >= 0.
+$$\mathcal{S} = (M, T, \Phi, O, \mathcal{I})$$
 
-## Candidate invariant
+* **$M$ (State Manifold):** Admissible state spaces with coordinate validation and topology wrapping (e.g., planar pendulum $M = S^1 \times \mathbb{R}$).
+* **$T$ (Time Domain):** Continuous evolution via 4th-order Runge-Kutta (RK4) integration.
+* **$\Phi$ (Evolution Operators):** Vector fields for conservative and dissipative systems.
+* **$O$ (Observation Model):** Maps true states to measurements while tracking trajectory divergence.
+* **$\mathcal{I}$ (Candidate Invariants):** Conserved quantities (e.g. total energy $E$) with residuals:
 
-The mechanical energy is
+  $$r_Q(t) = Q(x(t)) - Q(x(0))$$
 
-    E = (1/2) m L^2 omega^2 + mgL(1 - cos(theta))
+---
 
-For the conservative vector field, dE/dt = 0. For the dissipative
-vector field,
+## Adaptive Residual Diagnostics
 
-    dE/dt = -b m L^2 omega^2 <= 0
+The diagnostic engine scores residual trajectories heuristically to rank likely causes:
 
-These identities follow analytically from the equations. The simulation
-tests whether the numerical results are consistent with them.
+1. **Numerical Integration Truncation:** Expected RK4 global convergence error.
+2. **Unmodeled Physical Dissipation:** Monotonic damping signatures ($dE/dt < 0$).
+3. **Structural Mismatch:** Anomalous behavior distinct from baseline noise.
 
-For a trajectory x(t), the energy residual is
+---
 
-    r_E(t) = E(x(t)) - E(x(0))
+## Quickstart
 
-A small finite-time residual is numerical evidence, not proof of a general
-invariant. RK4 has fourth-order global convergence under its usual
-smoothness and stability assumptions; the test suite checks a finite-step
-convergence ratio for this specific experiment.
-
-## Diagnostics
-
-The drift signature score summarizes the alignment of net residual change
-with the direction of most residual increments. The small-residual score
-is scaled to a declared tolerance. Neither is a calibrated probability,
-confidence estimate, or proof of structure.
-
-## Run
-
-    python3 -m py_compile advanced_invariant_playground.py test_invariant_playground.py
-    python3 -m unittest -v test_invariant_playground.py
     python3 advanced_invariant_playground.py
-
-Python 3.9 or newer. No third-party packages required.
