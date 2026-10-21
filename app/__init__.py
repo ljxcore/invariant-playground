@@ -1,0 +1,1 @@
+# Invariant Playground application package.

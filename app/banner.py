@@ -1,0 +1,13 @@
+def show_banner():
+    print("=" * 68)
+    print("INVARIANT PLAYGROUND")
+    print("AI-Assisted Dynamical Systems Laboratory")
+    print("=" * 68)
+    print()
+    print("Available Systems")
+    print("-----------------")
+    print("[1] Simple Pendulum")
+    print("[2] Damped Pendulum")
+    print("[3] Lorenz Attractor (coming soon)")
+    print("[4] Double Pendulum (coming soon)")
+    print()
