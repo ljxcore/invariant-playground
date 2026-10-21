@@ -1,36 +1,35 @@
 #!/usr/bin/env python3
 
+import os
+import sys
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
 from benchmark.timer import benchmark
 import advanced_invariant_playground as sim
 
 
 def benchmark_rk4():
-    common = {"g": 9.81, "L": 1.0, "m": 1.0, "b": 0.0}
+    params = {"g": 9.81, "L": 1.0, "m": 1.0, "b": 0.0}
     initial = (1.2, 0.0)
 
-    _, elapsed = benchmark(
+    states, runtime = benchmark(
         sim.simulate,
         initial,
-        common,
+        params,
         sim.conservative,
         0.01,
         1000,
     )
 
-    states = sim.simulate(
-        initial,
-        common,
-        sim.conservative,
-        0.01,
-        1000,
-    )
+    residual = max(abs(r) for r in sim.residuals(states, params))
 
-    residual = max(abs(r) for r in sim.residuals(states, common))
-
-    return residual, elapsed
+    return residual, runtime
 
 
-if __name__ == "__main__":
+def main():
     residual, runtime = benchmark_rk4()
 
     print("=" * 68)
@@ -38,3 +37,7 @@ if __name__ == "__main__":
     print("=" * 68)
     print(f"Maximum residual : {residual:.6e}")
     print(f"Runtime          : {runtime:.6f} s")
+
+
+if __name__ == "__main__":
+    main()
