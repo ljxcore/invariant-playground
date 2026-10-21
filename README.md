@@ -39,3 +39,9 @@ The diagnostic engine scores residual trajectories heuristically to rank likely 
 ## Quickstart
 
     python3 advanced_invariant_playground.py
+
+---
+
+## Author
+
+**ljxcore**
