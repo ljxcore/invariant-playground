@@ -1,3 +1,30 @@
+"""
+====================================================================
+INVARIANT PLAYGROUND: SYSTEM VERIFICATION & UNIT TEST SUITE
+====================================================================
+Module: test_invariant_playground.py
+Author: ljxcore
+
+Overview:
+This test suite provides rigorous verification for the Invariant Playground 
+numerical engine. It ensures the mathematical and topological integrity 
+of simulated dynamical systems through targeted assertions:
+
+1. Manifold Topology Validation ($S^1 \times \mathbb{R}$):
+   - Ensures angular wrapping and coordinate bounds remain strictly 
+     admissible within the state manifold $M$.
+
+2. Numerical Integration Convergence (RK4):
+   - Validates the 4th-order Runge-Kutta implementation against known 
+     analytical trajectories and timestep stability thresholds.
+
+3. Conservation Invariant & Residual Tracking:
+   - Verifies total mechanical energy ($E$) tracking and evaluates 
+     residual trajectories ($r_Q(t) = Q(x(t)) - Q(x(0))$) under 
+     conservative and dissipative vector flows.
+====================================================================
+"""
+
 import math
 import unittest
 
